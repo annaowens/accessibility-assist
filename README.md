@@ -10,3 +10,5 @@ In fact, you can't search for work items that have linked pull requests at all: 
 ## Other things I've learned during the hackathon
 You can do cool PR filtering in ado: {add link}  
 To get even fancier, use this extension: {add link}
+
+To convert a shared query to WIQL, just export it: https://stackoverflow.com/questions/51618736/tfs-query-editor-is-there-a-way-to-get-the-underlying-wiql-for-a-given-tfs-shar
