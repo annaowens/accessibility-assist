@@ -18,7 +18,7 @@ class AccessibilityAssist
     static async void Runner()
     {
         var matchingWorkItemIds = await GetAccessibilityWorkItems();
-        var workItemsWithPRs = new Dictionary<int, List<string>>(); // GetPRsAndWorkItems();
+        var workItemsWithPRs = new Dictionary<int, List<string>>();
 
         foreach (int wi in matchingWorkItemIds)
         {
