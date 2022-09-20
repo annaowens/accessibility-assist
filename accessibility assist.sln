@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32901.215
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "accessibility assist", "accessibility assist\accessibility assist.csproj", "{F2D3B98B-9800-45BD-A398-39CA770249CC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F2D3B98B-9800-45BD-A398-39CA770249CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2D3B98B-9800-45BD-A398-39CA770249CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2D3B98B-9800-45BD-A398-39CA770249CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2D3B98B-9800-45BD-A398-39CA770249CC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {ED5CAAC2-01D5-41FB-B768-C95321EF98C9}
+	EndGlobalSection
+EndGlobal
