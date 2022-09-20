@@ -18,84 +18,23 @@ class AccessibilityAssist
     static async void Runner()
     {
         var matchingWorkItemIds = await GetAccessibilityWorkItems();
-        var workItemsWithPRs = new Dictionary<int, List<int>>(); // GetPRsAndWorkItems();
+        var workItemsWithPRs = new Dictionary<int, List<string>>(); // GetPRsAndWorkItems();
 
         foreach (int wi in matchingWorkItemIds)
         {
-            Console.WriteLine(wi);
             var linkedPRs = GetWorkItemsLinkedPRs(wi).SyncResult();
             if (!linkedPRs.IsNullOrEmpty())
             {
                 workItemsWithPRs.Add(wi, linkedPRs);
             }
         }
+
+        Utilities.PrintWorkItemsAndLinkedPRUrls(workItemsWithPRs);
     }
 
-    //static async Task<Dictionary<int, List<int>>> GetPRsAndWorkItems()
-    //{
-    //    var prsAndLinkedWorkItems = new Dictionary<int, List<int>>();
-
-    //    try
-    //    {
-    //        using (HttpClient client = new HttpClient())
-    //        {
-    //            client.DefaultRequestHeaders.Accept.Add(
-    //                new MediaTypeWithQualityHeaderValue("application/json"));
-
-    //            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic",
-    //                Convert.ToBase64String(
-    //                    System.Text.ASCIIEncoding.ASCII.GetBytes(
-    //                        string.Format("{0}:{1}", "", personalaccesstoken))));
-
-    //            using (HttpResponseMessage response = client.GetAsync(
-    //                $"https://dev.azure.com/mseng/AzureDevOps/_apis/git/repositories/AzureDevOps/pullrequests?api-version=5.1&searchCriteria.includeLinks=true&searchCriteria.status=completed&$top=10").Result)
-    //            {
-    //                response.EnsureSuccessStatusCode();
-    //                string responseBody = await response.Content.ReadAsStringAsync();
-    //                JObject o = JObject.Parse(responseBody);
-    //                foreach (var p in o)
-    //                {
-    //                    if (p.Value["value"].Value<JObject>("pullRequestId").Value <)
-    //                    {
-    //                        //do something
-    //                    }
-    //                }
-
-    //                var prs = new List<int>();
-
-    //                foreach (int pr in prs)
-    //                {
-    //                    using (HttpResponseMessage workItemsResponse = client.GetAsync(
-    //                        $"https://dev.azure.com/mseng/AzureDevOps/_apis/git/repositories/AzureDevOps/pullRequests/{pr}/workitems?api-version=5.1").Result)
-    //                    {
-    //                        workItemsResponse.EnsureSuccessStatusCode();
-    //                        string responseBody2 = await response.Content.ReadAsStringAsync();
-    //                        var responseJson = JsonConvert.DeserializeObject<PRResponse>(responseBody2);
-    //                        var prsWIs = new List<int>();
-    //                        prsWIs = responseJson.value.Select(wi => wi.Id).Select(int.Parse).ToList();
-    //                        prsAndLinkedWorkItems.Add(361393, prsWIs);
-    //                        Console.WriteLine(prsAndLinkedWorkItems.FirstOrDefault().Key);
-    //                        Console.WriteLine(prsAndLinkedWorkItems.FirstOrDefault().Value.FirstOrDefault());
-    //                        Console.WriteLine(prsAndLinkedWorkItems.FirstOrDefault().Value.FirstOrDefault());
-    //                    }
-    //                }
-    //            }
-    //        }
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        Console.WriteLine(ex.ToString());
-    //    }
-
-    //    return prsAndLinkedWorkItems;
-    //}
-
-    static async Task<List<int>> GetWorkItemsLinkedPRs(int workItemId)
+    static async Task<List<string>> GetWorkItemsLinkedPRs(int workItemId)
     {
-        Console.WriteLine("WorkItem: ", workItemId);
-
-        var workItemsLinkedPRs = new List<int>();
-        var workItemsLinkedPRst = new List<string>();
+        var workItemsLinkedPRs = new List<string>();
 
         try
         {
@@ -115,8 +54,11 @@ class AccessibilityAssist
                     response.EnsureSuccessStatusCode();
                     string responseBody = await response.Content.ReadAsStringAsync();
                     var responseJson = JsonConvert.DeserializeObject<WorkItemApiResponse>(responseBody);
-                    workItemsLinkedPRst = responseJson.relations.Where(relation => relation.rel == "ArtifactLink" && relation.attributes.name == "Pull Request").Select(relation => relation.url).ToList();
-                    Console.WriteLine(workItemsLinkedPRst.FirstOrDefault());
+                    workItemsLinkedPRs = responseJson.relations
+                        .Where(relation => relation.rel == "ArtifactLink" && relation.attributes.name == "Pull Request")
+                        .Select(relation => Utilities.ParsePRIdFromArtifactUrl(relation.url))
+                        .Where(prId => !prId.IsNullOrEmpty())
+                        .ToList();
                 }
             }
         }
@@ -128,7 +70,7 @@ class AccessibilityAssist
         return workItemsLinkedPRs;
     }
 
-    private static async Task<List<int>> GetAccessibilityWorkItems()
+    private static async Task<List<int>> GetAccessibilityWorkItems(int max = 10)
     {
         var matchingWorkItemIds = new List<int>();
 
@@ -158,7 +100,7 @@ class AccessibilityAssist
                     response.EnsureSuccessStatusCode();
                     string responseBody = await response.Content.ReadAsStringAsync();
                     var responseJson = JsonConvert.DeserializeObject<WorkItemQueryResult>(responseBody);
-                    matchingWorkItemIds = responseJson.WorkItems.Select(wi => wi.Id).ToList();
+                    matchingWorkItemIds = responseJson.WorkItems.Select(wi => wi.Id).Take(max).ToList(); ;
                 }
             }
         }
