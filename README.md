@@ -20,7 +20,7 @@ In fact, you can't search for work items that have linked pull requests at all: 
 
 
 ## Other things I've learned during the hackathon
-You can do cool PR filtering in ado: {add link}  
-To get even fancier, use this extension: {add link}
+You can define your own custom PR filtering in ADO: [MSFT Docs: Define a custom pull request view](https://learn.microsoft.com/en-us/azure/devops/repos/git/view-pull-requests?view=azure-devops&tabs=browser#define-a-custom-pull-request-view)  
+To get even fancier, this extension has advanced filtering (esp. by keyword): [Pull request manager hub](https://marketplace.visualstudio.com/items?itemName=caribeiro84.pull-request-manager-hub)
 
 To convert a shared query to WIQL, just export it: https://stackoverflow.com/questions/51618736/tfs-query-editor-is-there-a-way-to-get-the-underlying-wiql-for-a-given-tfs-shar
