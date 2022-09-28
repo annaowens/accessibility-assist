@@ -16,7 +16,7 @@ namespace accessibility_assist
 
         public static void PrintWorkItemsAndLinkedPRUrls(Dictionary<int, List<string>> workItemsAndLinkedPRUrls)
         {
-            Console.WriteLine("\nWorkItemLink\n--> PR #1\n-->PR #2");
+            Console.WriteLine("\nWorkItemLink\n--> PR #1\n--> PR #2");
             foreach (int wiId in workItemsAndLinkedPRUrls.Keys)
             {
                 Console.WriteLine("\n----------------------------------------------------------------");
